@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>timekeeper</title>
+		<link rel="stylesheet" type="text/css" href="css/styles.css"  />
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/jira.js"></script>
+		<script type="text/javascript" src="js/timer.js"></script>
+	</head>
+	<body>
+		<section id="controls">
+			<button onclick="timekeeper.addTimer();">add timer</button>
+			<button onclick="jira.toggleLogin();">login to Jira</button>
+			<div id="jira_login" class="hidden">
+				<label>
+					<input type="text" name="jira_un" placeholder="jira username"/>
+				</label>
+				<label>
+					<input type="password" name="jira_pw" placeholder="jira password"/>
+				</label>
+				<button onclick="jira.connect()">login</button>
+			</div>
+		</section>
+		<section id="timers"></section>
+		<div id="loading" class="hidden">loading</div>
+		<script type="text/javascript">
+			window.onbeforeunload = function(e){
+				return 'Have you logged your times?';
+			}
+			if(typeof(Timekeeper) != 'undefined'){
+				var timekeeper = new Timekeeper({wrapper:'#timers', loading_wrapper:'#loading'});
+			}
+			if(typeof Jira != 'undefined')
+				var jira = new Jira({wrapper: '#jira_login', fields: {pw: 'jira_pw', un: 'jira_un'}});
+		</script>
+	</body>
+</html>	

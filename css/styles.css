@@ -1,0 +1,98 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+.hidden {
+	display: none;
+}
+/* general controls */
+#controls {
+	position: fixed;
+	z-index: 2;
+	width: 100%;
+	background-color: rgba(223, 234, 253, 0.9);
+	padding: 10px 15px;
+	border-bottom: 1px solid rgba(185, 209, 252, 1);
+}
+
+/* timers */
+#timers {
+	position: relative;
+	z-index: 1;
+	color: rgba(0,0,0,0.7);
+	font-family: Helvetica, Verdana, sans-serif;
+	margin:0 auto;
+	padding-top: 50px;
+	width: 620px;
+}
+.timer {
+	position: relative;
+	width: 600px;
+	padding: 10px 15px;
+	margin-bottom: 10px;
+	border-radius: 5px;
+	background-color: rgba(255,255,255,1); 
+	-webkit-transition: background 1s;
+	-khtml-transition: background 1s;
+	-moz-transition: background 1s;
+	-o-transition: background 1s;
+	transition: background 1s;
+}
+.timer.active {
+	background-color: rgba(178, 245, 6, 0.2);
+}
+
+/* labels */
+.timer .label-container .label {
+	width: 99%;
+	border-width: 0 0 1px 0;
+	border-color: rgb(238,238,238);
+	background-color: transparent;
+	-webkit-transition: border 1s;
+	-khtml-transition: border 1s;
+	-moz-transition: border 1s;
+	-o-transition: border 1s;
+	transition: border 1s;
+	font-size: 14px;
+	margin-bottom: 5px;
+}
+.timer.active .label-container .label {
+	border-color: rgba(126, 170, 14, 0.4);
+}
+
+/* times */
+.timer .times {
+	display: inline-block;
+	margin-right: 10px;
+	vertical-align: middle;
+}
+.timer .times .hours,
+.timer .times .minutes{
+	margin-right: 5px;
+}
+
+/* timer controls */
+.timer .controls {
+	display: inline-block;
+	position: absolute;
+	right: 5px;
+	bottom: 6px;
+}
+.timer .controls button {
+	border: 0 none;
+	padding: 0;
+	margin: 3px;
+	text-indent: -9999px;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+}
+.timer .controls .start {
+	background:transparent url('../images/button_start.svg') 0 0 no-repeat scroll;
+}
+.timer .controls .pause {
+	background:transparent url('../images/button_pause.svg') 0 0 no-repeat scroll;
+}
+.timer .controls .remove {
+	background:transparent url('../images/button_remove.svg') 0 0 no-repeat scroll;
+}
