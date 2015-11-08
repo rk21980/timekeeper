@@ -16,13 +16,14 @@ var Jira = (function(){
 			// add input validation
 			
 			var _params = 
-				"un="+jQuery('input[name='+_fields.un+']').val()+"&"+
-				"pw="+jQuery('input[name='+_fields.pw+']').val();
+				"username="+jQuery('input[name='+_fields.un+']').val()+"&"+
+				"password="+jQuery('input[name='+_fields.pw+']').val();
 			
 			jQuery.ajax({
 				method: 'post',
 				url: timekeeper.baseURL+'jira_connect.php',
-				data: 'params='+window.btoa(unescape(encodeURIComponent(_params))),
+				//data: 'params='+window.btoa(unescape(encodeURIComponent(_params))),
+				data: 'params='+window.btoa(encodeURIComponent(_params)),
 				success: function(response){
 					console.warn(response);
 				},
@@ -44,6 +45,9 @@ var Jira = (function(){
 					_daddy.addClass('hidden');
 				}
 			}
+		},
+		logTime: function(params) {
+			
 		}
 	}
 	return Jira;
