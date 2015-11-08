@@ -5,7 +5,8 @@ var Timer = (function(){
 	
 	Timer.prototype = {
 		init: function(params){
-			this.id = new Date().getTime();
+			if( typeof( this.id ) == "undefined" )
+				this.id = new Date().getTime();
 			
 			this.time = {
 				hours: 0,
@@ -19,7 +20,7 @@ var Timer = (function(){
 			this.running = false;
 			
 			this.wrapperID = 'timer_'+this.id;
-			this.wrapperClass = 'timer';
+			this.wrapperClass = 'card';
 			this.timerClass = 'times';
 			this.hoursClass = 'hours';
 			this.minutesClass = 'minutes';
@@ -36,6 +37,7 @@ var Timer = (function(){
 		},
 		activate: function(){
 			this.running = true;
+			jQuery( this.wrapperID ).cursorover = false;
 			if(!jQuery('#'+this.wrapperID).hasClass('active'))
 				jQuery('#'+this.wrapperID).addClass('active');
 			jQuery('#'+this.wrapperID+' .'+this.startClass).hide();
@@ -51,7 +53,9 @@ var Timer = (function(){
 			jQuery('#'+this.wrapperID+' .'+this.pauseClass).hide();
 			jQuery('#'+this.wrapperID+' .'+this.removeClass).show();
 		},
-		render: function(){
+		render: function( allowEditing, renderControls ){
+			if( typeof allowEditing == "undefined" || allowEditing !== false )
+				allowEditing = true;
 			// renders the whole timer
 			var _wrapper = jQuery('<div />');
 			_wrapper.attr('id',this.wrapperID);
@@ -77,42 +81,78 @@ var Timer = (function(){
 				.append(_secondsWrapper);
 				
 			// controls
-			var _controlsWrapper = jQuery('<div />');
-			_controlsWrapper.addClass('controls');
-			var _startButton = jQuery('<button />');
-			_startButton.addClass(this.startClass);
-			_startButton.html('start');
-			_startButton.bind('click',this.start.bind(this));
-			var _pauseButton = jQuery('<button />');
-			_pauseButton.addClass(this.pauseClass);
-			_pauseButton.html('pause');
-			_pauseButton.bind('click', {setTotal: true}, this.pause.bind(this));
-			var _removeButton = jQuery('<button />');
-			_removeButton.addClass(this.removeClass);
-			_removeButton.html('remove');
-			_removeButton.bind('click',this.remove.bind(this));
-			
-			// build controls
-			_controlsWrapper
-				.append(_startButton)
-				.append(_pauseButton)
-				.append(_removeButton);
+			if( typeof renderControls == "undefined" || renderControls !== false )
+				renderControls = true;
+			if( renderControls && allowEditing ) {
+				var _controlsWrapper = jQuery('<div />');
+				_controlsWrapper.addClass('controls');
+				var _startButton = jQuery('<button />');
+				_startButton
+					.addClass(this.startClass + ' svg')
+					.html('start')
+					.bind('click',this.start.bind(this));
+				var _pauseButton = jQuery('<button />');
+				_pauseButton
+					.addClass(this.pauseClass + ' svg')
+					.html('pause')
+					.bind('click', {setTotal: true}, this.pause.bind(this));
+				var _removeButton = jQuery('<button />');
+				_removeButton
+					.addClass(this.removeClass + ' svg')
+					.html('remove')
+					.bind('click',this.remove.bind(this));
+				
+				// build controls
+				_controlsWrapper
+					.append(_startButton)
+					.append(_pauseButton)
+					.append(_removeButton);
+			}
 			
 			// label
 			var _labelWrapper = jQuery('<div />');
 			_labelWrapper.addClass('label-container');
 			var _label = jQuery('<input type="text" />');
-			_label.addClass(this.labelClass);
-			_label.bind('keyup',this.changeLabel.bind(this));
+			/*if( typeof this.label != "undefined" && this.label.length > 0 ) {
+				_placeholder = this.label;
+				if( !allowEditing ) {
+					_label.attr( "disabled", "disabled" );
+				}
+			}*/
+			_label
+				.addClass( this.labelClass )
+				.bind( 'keyup', this.changeLabel.bind( this ) );
+			if( typeof this.label != "undefined" && this.label.length > 0 ) {
+				_label.val( this.label );
+				if( !allowEditing ) {
+					_label.attr( "disabled", "disabled" );
+				}
+			} else {
+				_label.attr( 'placeholder', 'TASK DESCRIPTION or JIRA TICKET NUMBER' );
+			}
 			
 			// build label
 			_labelWrapper.append(_label);
 			
 			// build timer
+			var _self = this;
 			_wrapper
 				.append(_labelWrapper)
 				.append(_timerWrapper)
-				.append(_controlsWrapper);
+				.append(_controlsWrapper)
+				.on( { 
+					mouseover: function() {
+						if( _self.running !== true ) {
+							// TODO set 1 sec delay
+							_wrapper.addClass( 'active' );
+						}
+					},
+					mouseout: function() {
+						if( _self.running !== true ) {
+							_wrapper.removeClass( 'active' );
+						}
+					}
+				} );
 			
 			return _wrapper;
 		},
@@ -123,10 +163,13 @@ var Timer = (function(){
 			// updates given sections of timer output
 			switch(section){
 				case 'times':
-					jQuery('#'+this.wrapperID+' .'+this.hoursClass).html(this.getTime('hours', true));
-					jQuery('#'+this.wrapperID+' .'+this.minutesClass).html(this.getTime('minutes', true));
-					jQuery('#'+this.wrapperID+' .'+this.secondsClass).html(this.getTime('seconds', true));
-					break;
+					jQuery( '#' + this.wrapperID + ' .' + this.hoursClass ).html( this.getTime( 'hours', true ) );
+					jQuery( '#' + this.wrapperID + ' .' + this.minutesClass ).html( this.getTime( 'minutes', true ) );
+					jQuery( '#' + this.wrapperID + ' .' + this.secondsClass ).html( this.getTime( 'seconds', true ) );
+				break;
+				case 'label':
+					jQuery( '#' + this.wrapperID + ' .' + this.hoursClass ).val( this.label );
+				break;
 				default: ;
 			}
 		},
@@ -145,6 +188,10 @@ var Timer = (function(){
 			this.time.minutes = Math.floor((ms % 36e5) / 6e4);
 			this.time.seconds = Math.floor((ms % 6e4) / 1000);
 		},
+		setLabel: function( label ) {
+			this.changeLabel( label );
+			this.update( "label" );
+		},
 		setCurrentTimer: function(timeout){
 			this.currentTimer = timeout;
 		},
@@ -156,13 +203,16 @@ var Timer = (function(){
 				timekeeper.pauseTimers(this.id);
 			}
 		},
-		pause: function(e){
+		pause: function( e, resetClock ){
 			if(this.isActive()){
 				this.deactivate();
 				if(typeof(e) != 'undefined' && e.data.setTotal === true)
 					this.total += this.currentRun;
 				clearTimeout(this.currentTimer);
 				this.setLastPausedAt();
+				if( typeof( resetClock ) != "undefined" && resetClock === true ) {
+					this.init( {} );
+				}
 			}
 		},
 		getTime: function(part, formatted){
@@ -184,7 +234,7 @@ var Timer = (function(){
 			this.lastPausedAt = new Date().getTime();
 		},
 		remove: function(){
-			if(confirm('Are you sure about this?')){
+			if(confirm('Are you sure you want to remove this timer?')){
 				// remove from timekeeper then remove from screen
 				if(timekeeper.removeTimer(this.id)){
 					jQuery('#'+this.wrapperID).remove();

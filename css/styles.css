@@ -1,18 +1,194 @@
+html {
+	background-color: rgb(238, 238, 238);
+}
 body {
 	margin: 0;
 	padding: 0;
+	font-family: 'Roboto', Helvetica, Arial, sans-serif;
 }
+h3 {
+	margin: 0;
+	padding: 1em;
+	font-weight: normal;
+	border-color: #f3f3f3;
+	border-width: 1px;
+	border-style: solid;
+}
+button,
+.timer .controls button {
+	border: none;
+	padding: 0.5em 0.9em;
+	box-shadow: 1px 2px 4px #bbb;
+	font-family: 'Roboto', Helvetica, Arial, sans-serif;
+	font-size: 0.9em;
+	background-color: #FFF;
+	text-transform: uppercase;
+	cursor: pointer;
+	position: relative;
+}
+button.active {
+	background-color: background-color: rgb(249, 154, 137);
+	color: #FFF;
+}
+button:hover,
+.timer .controls button:hover,
+.breakalarm button.active  {
+	background-color: rgb(249, 154, 137);
+	color: #FFF;
+	transition: background .3s, color .3s;
+}
+button:focus,
+input:focus {
+	outline: 0;
+}
+input {
+	background-color: inherit;
+}
+
+
 .hidden {
 	display: none;
 }
+.icon-remove {
+	position: absolute;
+	right: 1em;
+	bottom: 0em;
+	font-weight: 300;
+	font-size: 0.7em;
+	color: rgb(224, 152, 82);
+	cursor: pointer;
+}
+.icon-remove::after {
+	content: "remove";
+}
+.button-banner {
+	position: absolute;
+	top: -0.3em;
+	right: -1.7em;
+	font-size: 9px;
+	padding: .5em .7em;
+	color: white;
+	background-color: rgba(37, 126, 42, 0.5);
+	z-index: 100;
+	transform: rotate(20deg);
+	font-weight: bold;
+}
+.button-banner.banner-soon {
+	background-color: rgba(207, 1, 1, 0.5);
+}
+.scroll-for-more {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 1em 1em 0.5em 1em;
+	background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 1))
+}
+.card {
+	display: inline-block;
+	margin: .5em 1em 1.5em 1em;
+	background-color: #FFF;
+	box-shadow: 0px 0.1em 0.3em #bbb;
+	position: relative;
+	vertical-align: middle;
+	border-radius: 0.2em;
+	transition: all .3s;
+}
+
+.card .label-container {
+	padding: .5em 1em;
+	min-width: 17em;
+}
+.card .label-container input {
+	border: 0 none;
+	display: block;
+	font-size: 0.9em;
+	width: 100%;
+	font-family: 'Roboto', Helvetica, Arial, sans-serif;
+}
+
+.card .times {
+	padding: 0.5em;
+	font-size: 1.5em;
+	color: rgb(45, 86, 107);
+	text-align: center;
+}
+.card.active .times {
+	background-color: rgb(45, 86, 107);
+	color: white;
+}
+.card .times span {
+	margin-right: 0.2em;
+}
+
+.card .controls {
+	height: 0;
+	overflow: hidden;
+	transition: all .2s;
+}
+.card.active .controls {
+	height: auto;
+	margin: 1em 1em 1em 0em;
+}
+
+.card button {
+	box-shadow: none;
+	color: rgb(87, 171, 215);
+}
+.card button:hover {
+	background-color: rgb(87, 171, 215);
+	color: white;
+}
+
+.card-header {
+	background-color: rgb(224, 152, 82);
+	box-shadow: 0px 0.1em 0.3em #bbb;
+	margin-bottom: 0.5em;
+	color: white;
+}
+.card-content-toggler {
+	
+}
+.card-content.scrollable {
+	overflow: scroll;
+	position: absolute;
+	top: 4.1em;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+.card-subheader {
+	position: relative;
+	font-size: 1.2em;
+	font-weight: bold;
+	padding: 1em 1em 0;
+	margin-bottom: .5em;
+}
+
+/* chips */
+.chip.odd {
+	background-color: rgba(224, 152, 82, .1);
+}
+.chip .times {
+	text-align: left;
+	font-size: 1.2em;
+	padding: 0em 1em 1em;
+}
+
+
+
+
 /* general controls */
 #controls {
 	position: fixed;
 	z-index: 2;
 	width: 100%;
-	background-color: rgba(223, 234, 253, 0.9);
 	padding: 10px 15px;
-	border-bottom: 1px solid rgba(185, 209, 252, 1);
+	background-color: rgba(238,238,238,.9);
+	border-bottom: 1px solid #ddd;
+}
+#controls button {
+	margin-right: 2em;
 }
 
 /* timers */
@@ -20,31 +196,40 @@ body {
 	position: relative;
 	z-index: 1;
 	color: rgba(0,0,0,0.7);
-	font-family: Helvetica, Verdana, sans-serif;
-	margin:0 auto;
-	padding-top: 50px;
-	width: 620px;
+	font-family: 'Roboto', Helvetica, Arial, sans-serif;
+	top: 4em;
+	display: inline-block;
+	margin-right: 23em;
+	margin-bottom: 6em;
+}
+.button-timer {
+	/*background-image: url('../images/icon-timer.svg');*/
 }
 .timer {
 	position: relative;
-	width: 600px;
-	padding: 10px 15px;
-	margin-bottom: 10px;
-	border-radius: 5px;
+	left: 50%;
+	width: 60%;
+	height: 3em;
+	min-width: 340px;
+	padding: .6em 1em;
+	margin-left: -30%;
+	margin-bottom: .4em;
+	position: relative;
 	background-color: rgba(255,255,255,1); 
-	-webkit-transition: background 1s;
-	-khtml-transition: background 1s;
-	-moz-transition: background 1s;
-	-o-transition: background 1s;
-	transition: background 1s;
+	-webkit-transition: background .2s;
+	-khtml-transition: background .2s;
+	-moz-transition: background .2s;
+	-o-transition: background .2s;
+	transition: background .2s, height .2s;
 }
 .timer.active {
 	background-color: rgba(178, 245, 6, 0.2);
+	height: 5.5em;
 }
 
 /* labels */
 .timer .label-container .label {
-	width: 99%;
+	width: 97%;
 	border-width: 0 0 1px 0;
 	border-color: rgb(238,238,238);
 	background-color: transparent;
@@ -55,6 +240,8 @@ body {
 	transition: border 1s;
 	font-size: 14px;
 	margin-bottom: 5px;
+	padding: 1em;
+	font-family: 'Roboto', Helvetica, Arial, sans-serif;
 }
 .timer.active .label-container .label {
 	border-color: rgba(126, 170, 14, 0.4);
@@ -63,8 +250,21 @@ body {
 /* times */
 .timer .times {
 	display: inline-block;
-	margin-right: 10px;
+	padding: 0 0.2em;
 	vertical-align: middle;
+	font-size: 1.5em;
+	font-weight: 100;
+	cursor: default;
+	position: absolute;
+	right: 0.8em;
+	top: 0.8em;
+	transition: top .1s;
+}
+.timer.active .times {
+	font-size: 2em;
+	position: relative;
+	right: 0;
+	top: 0;
 }
 .timer .times .hours,
 .timer .times .minutes{
@@ -73,26 +273,111 @@ body {
 
 /* timer controls */
 .timer .controls {
-	display: inline-block;
+	display: none;
 	position: absolute;
-	right: 5px;
-	bottom: 6px;
+	right: 1.2em;
+	bottom: 0.5em;
+}
+.timer.active .controls {
+	display: inline-block;
 }
 .timer .controls button {
 	border: 0 none;
-	padding: 0;
+	padding: 1.2em;
 	margin: 3px;
 	text-indent: -9999px;
 	width: 20px;
 	height: 20px;
+	background:transparent url('../images/button_start.svg') 0.9em 0.5em no-repeat scroll;
 	cursor: pointer;
 }
+.timer .controls button:hover {
+	background-color: rgb(174, 244, 110);
+	box-shadow: 1px 2px 4px #80BD7F;
+}
+.timer .controls button.remove:hover {
+	background-color: rgb(229, 93, 87);
+	background-image: url('../images/button_remove_hover.svg');
+	box-shadow: 1px 2px 4px #BD847F;
+	color: #FFF;
+}
+.timer .controls button.pause:hover {
+	background-color: rgb(250, 220, 103);
+	box-shadow: 1px 2px 4px #C3A369;
+}
+.timer .controls button.svg {
+	border: 0;
+	
+}
+.timer.active .controls button.svg {
+	height: 1.9em;	
+}
+.timer .controls button.start.svg {
+	width: 1.2em;
+}
+.timer.active .controls button.start.svg {
+	width: 1.6em;
+}
+.timer .controls button.pause.svg {
+	width: 1.2em;
+}
+.timer .controls button.remove.svg {
+	width: 1.9em;
+}
 .timer .controls .start {
-	background:transparent url('../images/button_start.svg') 0 0 no-repeat scroll;
+	background-image: url('../images/button_start.svg');
 }
 .timer .controls .pause {
-	background:transparent url('../images/button_pause.svg') 0 0 no-repeat scroll;
+	background-image: url('../images/button_pause.svg');
 }
 .timer .controls .remove {
-	background:transparent url('../images/button_remove.svg') 0 0 no-repeat scroll;
+	background-image: url('../images/button_remove.svg');
+}
+.timer.active .controls .remove {
+	background-position: .6em .5em;
+}
+
+/* breakalarm */
+.breakalarm { display: inline-block; }
+
+/* archive */
+#archive {
+	width: 21em;
+	position: absolute;
+	right: 0;
+	top: 4em;
+	bottom: 2em;
+	overflow: hidden;
+}
+#archive.card .card-subheader button {
+	position: absolute;
+	right: 1em;
+	color: rgb(224, 152, 82);
+}
+#archive.card .card-subheader button:hover {
+	background-color: rgb(224, 152, 82);
+	color: #FFF;
+	transition: background .3s, color .3s;
+}
+#archive.card .times {
+	text-align: left;
+	font-size: 1em;
+	padding-left: 1em;
+	font-weight: 600;
+}
+
+/* bottom strip */
+#strip-bottom {
+	position: fixed;
+	bottom: 0;
+	z-index: 1000;
+	border-top: 1px solid #ddd;
+	background-color: rgba(238,238,238,.9);
+	width: 100%;
+}
+#strip-bottom .section-container {
+	  padding: 0 1em;
+	font-size: 0.8em;
+	text-align: center;
+	color: #666;
 }
