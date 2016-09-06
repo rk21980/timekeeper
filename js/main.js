@@ -15,7 +15,7 @@ var Timekeeper = (function(){
 			this.timers = [];
 			
 			//this.baseURL = '/timekeeper/';
-			this.baseURL = '/dev_timekeeper/';
+			this.baseURL = '/timekeeper/';
 			this.loading = false;
 		},
 		addTimer: function(){
@@ -29,8 +29,8 @@ var Timekeeper = (function(){
 				){
 					this.timers.push(_timer);
 					this.wrapper.append(_timer.render());
-					_timer.start();
 					this.pauseTimers(_timer.id);
+					_timer.start();
 				}
 			}
 		},
