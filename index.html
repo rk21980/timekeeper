@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>timekeeper v1.0.1</title>
+		<title>timekeeper v1.1.0</title>
 		<link rel="stylesheet" type="text/css" href="css/styles.css"  />
 		<link href='http://fonts.googleapis.com/css?family=Roboto:300,700,400' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" href="images/favicon-clock-o.ico?v2" id="favicon">
 		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script type="text/javascript" src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
@@ -17,9 +18,9 @@
 			<div class="section-inset">
 				<div class="section-container">
 					<button onclick="timekeeper.addTimer();" class="button-timer">add timer</button>
-					<button onclick="jira.toggleLogin();">login to Jira<span class="button-banner banner-soon">soon</span></button>
+					<button onclick="jira.toggleLogin();" disabled="disabled">login to Jira<span class="button-banner banner-soon">soon</span></button>
 					<div class="breakalarm">
-						<button onclick="breakalarm.toggle( this );">breakalarm <span class="status">Off</span><span class="button-banner">beta</span></button>
+						<button onclick="breakalarm.toggle( this );">breakalarm <span class="status">Off</span></button>
 					</div>
 					<div id="jira_login" class="hidden">
 						<label>
@@ -51,7 +52,7 @@
 		</section>
 		<section id="strip-bottom">
 			<div class="section-container">
-				<p>Did you know? You can now remove timers from the archive by hovering over the timer and clicking on "remove".</p>
+				<p>LATEST FEATURE: the favicon now indicates if there are no timers running.</p>
 			</div>
 		</section>
 		<div id="loading" class="hidden">loading</div>

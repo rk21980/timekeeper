@@ -31,6 +31,7 @@ var Timer = (function(){
 			this.removeClass = 'remove';
 			
 			this.labelClass = 'label';
+
 		},
 		isActive: function(){
 			return this.running;
@@ -44,6 +45,7 @@ var Timer = (function(){
 			jQuery('#'+this.wrapperID+' .'+this.pauseClass).show();
 			jQuery('#'+this.wrapperID+' .'+this.removeClass).hide();
 			jQuery('#'+this.wrapperID+' .'+this.labelClass).focus();
+			this.updateIcon("running");
 		},
 		deactivate: function(){
 			this.running = false;
@@ -52,6 +54,7 @@ var Timer = (function(){
 			jQuery('#'+this.wrapperID+' .'+this.startClass).show();
 			jQuery('#'+this.wrapperID+' .'+this.pauseClass).hide();
 			jQuery('#'+this.wrapperID+' .'+this.removeClass).show();
+			this.updateIcon();
 		},
 		render: function( allowEditing, renderControls ){
 			if( typeof allowEditing == "undefined" || allowEditing !== false )
@@ -197,10 +200,10 @@ var Timer = (function(){
 		},
 		start: function(){
 			if(this.isActive() === false){
+				timekeeper.pauseTimers(this.id);
 				this.setLastStartedAt();
 				this.activate();
 				this.increment();
-				timekeeper.pauseTimers(this.id);
 			}
 		},
 		pause: function( e, resetClock ){
@@ -239,6 +242,44 @@ var Timer = (function(){
 				if(timekeeper.removeTimer(this.id)){
 					jQuery('#'+this.wrapperID).remove();
 				}
+			}
+		},
+		updateIcon: function( currentStatus ){
+			var canvas = document.createElement('canvas'),
+				ctx,
+				img = document.createElement('img'),
+				link = document.getElementById('favicon').cloneNode(true),
+				iconSrc = "images/favicon-clock-o.ico";
+			if( typeof currentStatus == "undefined" )
+				currentStatus = "idle";
+
+			if (canvas.getContext) {
+				canvas.height = canvas.width = 16; // set the size
+				ctx = canvas.getContext('2d');
+				img.onload = function () { // once the image has loaded
+					ctx.drawImage(this, 0, 0);
+
+					switch( currentStatus ) {
+						case "running":
+							/*ctx.beginPath();
+							ctx.arc(13, 13, 3, 0, 2 * Math.PI, false);
+							ctx.fillStyle = 'rgb(119, 242, 90)';
+							ctx.fill();*/
+							break;
+						case "idle":
+						default: // red circle
+							ctx.beginPath();
+							ctx.arc(13, 13, 3, 0, 2 * Math.PI, false);
+							ctx.fillStyle = 'rgb(242, 63, 88)';
+							ctx.fill();
+					}
+
+					link.href = canvas.toDataURL('image/png');
+					document.head.removeChild(document.getElementById('favicon'));
+					document.head.appendChild(link);
+				};
+
+				img.src = iconSrc;
 			}
 		}
 	}
